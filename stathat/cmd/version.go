@@ -97,7 +97,7 @@ var versionCmd = &cobra.Command{
 		rand.Seed(time.Now().Unix())
 		index := rand.Intn(len(logos))
 		fmt.Println(logos[index])
-		fmt.Println("stathat cmd version 0.1.0\n")
+		fmt.Printf("stathat cmd version 0.1.0\n\n")
 	},
 }
 
