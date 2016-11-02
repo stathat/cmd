@@ -1,0 +1,19 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "BqUqNg3UuaPTse8Vg+xR/zW6tKw=",
+			"path": "github.com/spf13/cobra",
+			"revision": "ec2fe7859914a5106dcab4e7901633d959bfc2f4",
+			"revisionTime": "2016-10-10T15:14:18Z"
+		},
+		{
+			"checksumSHA1": "+RJudGkFugn3gRJYUIan1Wbugdw=",
+			"path": "github.com/spf13/viper",
+			"revision": "51f23d1f1c56a7773ae8f2cfd038f7996ecc9ac2",
+			"revisionTime": "2016-10-10T11:40:38Z"
+		}
+	],
+	"rootPath": "github.com/stathat/cmd/stathat"
+}
