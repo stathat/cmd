@@ -4,7 +4,10 @@
 
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+	"github.com/stathat/cmd/stathat/intr"
+)
 
 var alertCmd = &cobra.Command{
 	Use:   "alert",
@@ -54,6 +57,8 @@ func init() {
 	alertCmd.AddCommand(alertDataCmd)
 	alertCmd.AddCommand(alertDeleteCmd)
 	alertCmd.AddCommand(alertListCmd)
+	alertListCmd.Flags().BoolVar(&listJSON, "json", false, "display output as JSON")
+	alertListCmd.Flags().BoolVar(&listCSV, "csv", false, "display output as CSV")
 	alertCmd.AddCommand(alertInfoCmd)
 }
 
@@ -70,8 +75,33 @@ func runAlertDelete(cmd *cobra.Command, args []string) error {
 	return nil
 }
 func runAlertList(cmd *cobra.Command, args []string) error {
-	return nil
+	if len(args) != 0 {
+		return cmd.Usage()
+	}
+
+	alerts, err := intr.AlertList()
+	if err != nil {
+		return err
+	}
+
+	return outputAlerts(alerts)
 }
 func runAlertInfo(cmd *cobra.Command, args []string) error {
 	return nil
+}
+
+func outputAlerts(alerts []intr.Alert) error {
+	t := intr.NewAlertTable(alerts)
+
+	var enc OutputEncoding
+	switch {
+	case listJSON:
+		enc = OutputJSON
+	case listCSV:
+		enc = OutputCSV
+	default:
+		enc = OutputTab
+	}
+
+	return Output(t, enc)
 }

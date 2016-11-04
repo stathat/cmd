@@ -26,7 +26,7 @@ var timeframe string
 func init() {
 	RootCmd.AddCommand(datasetCmd)
 	datasetCmd.Flags().BoolVar(&listJSON, "json", false, "display output as JSON")
-	datasetCmd.Flags().BoolVar(&listCSV, "csv", false, "display output as JSON")
+	datasetCmd.Flags().BoolVar(&listCSV, "csv", false, "display output as CSV")
 	datasetCmd.Flags().StringVar(&timeframe, "tf", "1w3h", "timeframe")
 }
 
