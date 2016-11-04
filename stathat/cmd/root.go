@@ -76,16 +76,16 @@ func initConfig() {
 	}
 
 	viper.SetConfigName("config")         // name of config file (without extension)
+	viper.AddConfigPath(".")              // adding current directory as first search path
 	viper.AddConfigPath("$HOME/.stathat") // adding home directory as first search path
-	viper.AddConfigPath(".")              // adding home directory as first search path
 	viper.SetEnvPrefix("stathat")
 	viper.AutomaticEnv() // read in environment variables that match
 
 	viper.BindPFlag("host", RootCmd.Flags().Lookup("host"))
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Printf("Error in config file %q: %s\n", viper.ConfigFileUsed(), err)
 	}
 
 	names := strings.Split(debug, ",")
