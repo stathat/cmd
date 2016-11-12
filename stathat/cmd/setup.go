@@ -14,7 +14,7 @@ import (
 // setupCmd represents the setup command
 var setupCmd = &cobra.Command{
 	Use:   "setup",
-	Short: "Set up StatHat access keys",
+	Short: "set up StatHat access keys",
 	Long:  `Setup configures the CLI access keys.`,
 	RunE:  setup,
 }

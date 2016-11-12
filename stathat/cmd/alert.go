@@ -17,24 +17,24 @@ import (
 
 var alertCmd = &cobra.Command{
 	Use:   "alert",
-	Short: "Manage alerts",
+	Short: "manage alerts",
 }
 
 var alertValueCmd = &cobra.Command{
 	Use:   "value",
-	Short: "Create a value alert",
+	Short: "create a value alert",
 	RunE:  runAlertValue,
 }
 
 var alertDeltaCmd = &cobra.Command{
 	Use:   "delta",
-	Short: "Create a delta alert",
+	Short: "create a delta alert",
 	RunE:  runAlertDelta,
 }
 
 var alertDataCmd = &cobra.Command{
 	Use:   "data",
-	Short: "Create a data alert",
+	Short: "create a data alert",
 	RunE:  runAlertData,
 }
 
@@ -48,20 +48,20 @@ var alertCreateFlags struct {
 
 var alertDeleteCmd = &cobra.Command{
 	Use:    "delete",
-	Short:  "Delete an alert",
+	Short:  "delete an alert",
 	RunE:   runAlertDelete,
 	Hidden: true,
 }
 
 var alertListCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all alerts",
+	Short: "list all alerts",
 	RunE:  runAlertList,
 }
 
 var alertInfoCmd = &cobra.Command{
 	Use:    "info",
-	Short:  "Get info about an alert",
+	Short:  "get info about an alert",
 	RunE:   runAlertInfo,
 	Hidden: true,
 }

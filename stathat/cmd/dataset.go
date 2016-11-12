@@ -17,7 +17,7 @@ import (
 // datasetCmd gets a dataset for a stat.
 var datasetCmd = &cobra.Command{
 	Use:   "dataset",
-	Short: "gets datasets for stats",
+	Short: "get datasets for stats",
 	RunE:  runDataset,
 }
 

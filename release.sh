@@ -12,7 +12,7 @@ version="$1"
 version_tag="v$version"
 
 echo "-------------------------------------------------------------------------"
-echo "Creating release for version $version
+echo "Creating release for version $version"
 echo "-------------------------------------------------------------------------"
 
 srcdir="$GOPATH/src/github.com/stathat/cmd"

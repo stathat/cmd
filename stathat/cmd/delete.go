@@ -8,9 +8,10 @@ import "github.com/spf13/cobra"
 
 // deleteCmd deletes a stat.
 var deleteCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "delete a stat",
-	RunE:  runDelete,
+	Use:    "delete",
+	Short:  "delete a stat",
+	RunE:   runDelete,
+	Hidden: true,
 }
 
 func init() {

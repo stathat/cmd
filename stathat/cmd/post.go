@@ -15,18 +15,18 @@ import (
 
 var postCmd = &cobra.Command{
 	Use:   "post",
-	Short: "Post stat data to StatHat",
+	Short: "post stat data to StatHat",
 }
 
 var postValueCmd = &cobra.Command{
 	Use:   "value",
-	Short: "Post value data point to StatHat",
+	Short: "post value data point to StatHat",
 	RunE:  runPostValue,
 }
 
 var postCountCmd = &cobra.Command{
 	Use:   "count",
-	Short: "Post count data point to StatHat",
+	Short: "post count data point to StatHat",
 	RunE:  runPostCount,
 }
 
