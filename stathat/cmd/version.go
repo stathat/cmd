@@ -88,19 +88,28 @@ __) |_(_| |_  |  | |(_| |_
 
 var logos = []string{logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9}
 
+const version = "0.1.0"
+
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "print stathat cmd version",
 	Long:  `Version prints the stathat command line utility version`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if short {
+			fmt.Println(version)
+			return
+		}
 		rand.Seed(time.Now().Unix())
 		index := rand.Intn(len(logos))
 		fmt.Println(logos[index])
-		fmt.Printf("stathat cmd version 0.1.0\n\n")
+		fmt.Printf("stathat cmd version %s\n\n", version)
 	},
 }
 
+var short bool
+
 func init() {
 	RootCmd.AddCommand(versionCmd)
+	versionCmd.Flags().BoolVarP(&short, "short", "s", false, "display just the version number")
 }

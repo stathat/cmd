@@ -82,6 +82,8 @@ func runSummary(cmd *cobra.Command, args []string) error {
 			w := new(tabwriter.Writer)
 			w.Init(os.Stdout, 0, 8, 2, '\t', 0)
 			fmt.Fprintf(w, "Name\t%s\n", s.Name)
+			fmt.Fprintf(w, "Timeframe\t%s\n", s.Timeframe)
+			fmt.Fprintf(w, "Kind\t%s\n", s.Kind())
 			fmt.Fprintf(w, "Latest\t%g\n", s.Latest)
 			fmt.Fprintf(w, "Min\t%g\n", s.Min)
 			fmt.Fprintf(w, "Max\t%g\n", s.Max)
@@ -172,6 +174,13 @@ func NewSummary(d *intr.Dataset) *Summary {
 	s.Conf99Max = s.Mean + delta99
 
 	return s
+}
+
+func (s *Summary) Kind() string {
+	if s.Counter {
+		return "counter"
+	}
+	return "value"
 }
 
 type SummaryTable struct {
