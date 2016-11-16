@@ -63,10 +63,6 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&debug, "debug", "", "debug flags (comma separated)")
 	RootCmd.PersistentFlags().StringVar(&posthost, "posthost", "https://api.stathat.com", "specify an api post host")
 	RootCmd.PersistentFlags().StringVar(&host, "host", "https://www.stathat.com", "specify a host")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	// RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -82,6 +78,7 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	viper.BindPFlag("host", RootCmd.Flags().Lookup("host"))
+	viper.BindPFlag("posthost", RootCmd.Flags().Lookup("posthost"))
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {

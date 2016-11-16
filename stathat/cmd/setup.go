@@ -7,6 +7,9 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"os"
+	"os/user"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -19,9 +22,30 @@ var setupCmd = &cobra.Command{
 	RunE:  setup,
 }
 
+var setupForce bool
+
+func init() {
+	RootCmd.AddCommand(setupCmd)
+	setupCmd.Flags().BoolVar(&setupForce, "force", false, "force setup (overwrite existing config)")
+}
+
 func setup(cmd *cobra.Command, args []string) error {
+	u, err := user.Current()
+	if err != nil {
+		return err
+	}
+	filename := filepath.Join(u.HomeDir, ".stathat", "config.yaml")
+	if !setupForce {
+		_, err = os.Stat(filename)
+		if !os.IsNotExist(err) {
+			return fmt.Errorf("config file %s already exists (use --force to overwrite)", filename)
+		}
+	}
+
 	var accessKey, ezKey string
-	fmt.Printf("Access key:  ")
+	fmt.Printf("Please enter an Access Token for your StatHat account.\n")
+	fmt.Printf("You can get one here: https://www.stathat.com/access\n\n")
+	fmt.Printf("Access token:  ")
 	n, err := fmt.Scanln(&accessKey)
 	if err != nil {
 		return err
@@ -29,7 +53,10 @@ func setup(cmd *cobra.Command, args []string) error {
 	if n != 1 {
 		return errors.New("stathat setup: invalid number of elts scanned")
 	}
-	fmt.Printf("EZ key:  ")
+	fmt.Printf("Please enter the EZ Key for your StatHat account.\n")
+	fmt.Printf("You can find it (and change it) on the settings page:\n\n")
+	fmt.Printf("\thttps://www.stathat.com/settings\n\n")
+	fmt.Printf("EZ Key:  ")
 	fmt.Scanln(&ezKey)
 	if err != nil {
 		return fmt.Errorf("stathat setup: error getting ez key: %s", err)
@@ -38,20 +65,12 @@ func setup(cmd *cobra.Command, args []string) error {
 		return errors.New("stathat setup: invalid number of elts scanned")
 	}
 
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	fmt.Fprintf(f, "accesskey: %s\nezkey: %s\n", accessKey, ezKey)
+	f.Close()
+
 	return nil
-}
-
-func init() {
-	RootCmd.AddCommand(setupCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// setupCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// setupCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
 }
