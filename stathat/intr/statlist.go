@@ -3,10 +3,11 @@ package intr
 import "github.com/stathat/cmd/stathat/net"
 
 type Stat struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Public  bool   `json:"public"`
-	Counter bool   `json:"counter"`
+	ID             string `json:"id"`
+	Name           string `json:"name"`
+	Public         bool   `json:"public"`
+	Counter        bool   `json:"counter"`
+	DataReceivedAt int    `json:"data_received_at"`
 }
 
 func (s Stat) Kind() string {
@@ -34,3 +35,9 @@ func StatList() ([]Stat, error) {
 	}
 	return stats, nil
 }
+
+type ByDataReceivedAt []Stat
+
+func (a ByDataReceivedAt) Len() int           { return len(a) }
+func (a ByDataReceivedAt) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByDataReceivedAt) Less(i, j int) bool { return a[i].DataReceivedAt > a[j].DataReceivedAt }

@@ -3,6 +3,7 @@ package net
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -55,6 +56,7 @@ func (a *API) do(r *http.Request, dest interface{}) error {
 }
 
 func (a *API) Get(path string, params url.Values, dest interface{}) error {
+	log.Printf("Get")
 	req, err := getReq("GET", path, params)
 	if err != nil {
 		return err
@@ -89,11 +91,11 @@ func (a *API) Put(path string, params url.Values, dest interface{}) error {
 func getReq(method, path string, vals url.Values) (*http.Request, error) {
 	r, err := http.NewRequest(method, "", nil)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("http.NewRequest error: %s", err)
 	}
 	r.URL, err = newURL(path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("newURL error: %s", err)
 	}
 	r.URL.RawQuery = vals.Encode()
 	return r, nil
