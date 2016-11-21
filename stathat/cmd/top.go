@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -13,6 +14,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/stathat/cmd/stathat/config"
 	"github.com/stathat/cmd/stathat/intr"
+	"github.com/stathat/numbers"
 )
 
 // topCmd represents the top command
@@ -216,10 +218,46 @@ func (b *background) summary() {
 		b.Lock()
 		b.datasets[s.ID] = dset
 		b.Unlock()
+		width := 8
 		sum := NewSummary(&dset)
-		sumStr := fmt.Sprintf("%g\t%g\t%g\t%g\t%g\t%g\t%g\t%g", sum.Latest, sum.Min, sum.Max, sum.Mean, sum.Total, sum.StdDev, sum.Conf95Min, sum.Conf99Max)
+		// sumStr := fmt.Sprintf("%6.2f\t%6.2f\t%6.2f\t%.6g\t%.6g\t%.6g\t%.6g\t%.6g", sum.Latest, sum.Min, sum.Max, sum.Mean, sum.Total, sum.StdDev, sum.Conf95Min, sum.Conf99Max)
+		sumStr := strings.Join([]string{
+			floatCol(sum.Latest, width),
+			floatCol(sum.Min, width),
+			floatCol(sum.Max, width),
+			floatCol(sum.Mean, width),
+			floatCol(sum.Total, width),
+			floatCol(sum.StdDev, width),
+			floatCol(sum.Conf95Min, width),
+			floatCol(sum.Conf95Max, width),
+		}, " ")
 		b.model.SetSummary(s.ID, sumStr)
 	}
+}
+
+func floatCol(x float64, width int) string {
+	s := numbers.Humanize(x)
+
+	return fmt.Sprintf("%8s", s)
+}
+
+// floatCol formats x to be 12 chars long.
+// http://stackoverflow.com/questions/36515818/golang-is-there-any-standard-library-to-convert-float64-to-string-with-fix-widt
+func floatCol2(x float64, width int) string {
+	if x >= 1e12 {
+		// Check to see how many fraction digits fit in:
+		s := fmt.Sprintf("%.g", x)
+		format := fmt.Sprintf("%%12.%dg", width-len(s))
+		return fmt.Sprintf(format, x)
+	}
+
+	// Check to see how many fraction digits fit in:
+	s := fmt.Sprintf("%.0f", x)
+	if len(s) == width {
+		return s
+	}
+	format := fmt.Sprintf("%%%d.%df", len(s), width-len(s)-1)
+	return fmt.Sprintf(format, x)
 }
 
 func top(cmd *cobra.Command, args []string) error {

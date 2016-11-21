@@ -3,7 +3,6 @@ package net
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -56,7 +55,6 @@ func (a *API) do(r *http.Request, dest interface{}) error {
 }
 
 func (a *API) Get(path string, params url.Values, dest interface{}) error {
-	log.Printf("Get")
 	req, err := getReq("GET", path, params)
 	if err != nil {
 		return err
