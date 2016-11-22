@@ -30,6 +30,7 @@ func init() {
 
 var (
 	StyleNormal = tcell.StyleDefault.Foreground(tcell.ColorSilver).Background(tcell.ColorBlack)
+	StyleBold   = tcell.StyleDefault.Foreground(tcell.ColorSilver).Background(tcell.ColorBlack).Bold(true)
 	StyleGood   = tcell.StyleDefault.Foreground(tcell.ColorGreen).Background(tcell.ColorBlack)
 	StyleWarn   = tcell.StyleDefault.Foreground(tcell.ColorYellow).Background(tcell.ColorBlack)
 	StyleError  = tcell.StyleDefault.Foreground(tcell.ColorMaroon).Background(tcell.ColorBlack)
@@ -64,6 +65,8 @@ func (a *mainWindow) HandleEvent(ev tcell.Event) bool {
 type model struct {
 	stats     []intr.Stat
 	summaries map[string]string
+	timeframe string
+	heading   string
 	sync.Mutex
 }
 
@@ -86,6 +89,13 @@ func (m *model) SetSummary(id, summary string) {
 	m.Unlock()
 }
 
+func (m *model) SetTimeframe(t string) {
+	m.Lock()
+	m.timeframe = t
+	m.heading = fmt.Sprintf("%-41s%9s%9s%9s%9s%9s%9s%9s%9s", m.timeframe, "Latest", "Min", "Max", "Mean", "Total", "StdDev", "95% Min", "95% Max")
+	m.Unlock()
+}
+
 func (m *model) GetBounds() (int, int) {
 	return 80, 24
 }
@@ -97,9 +107,20 @@ func (m *model) GetCell(x, y int) (rune, tcell.Style, []rune, int) {
 		return ch, StyleNormal, nil, 1
 	}
 
+	if y == 0 {
+		if x >= 0 && x < len(m.heading) {
+			ch = rune(m.heading[x])
+		} else {
+			ch = ' '
+		}
+
+		return ch, StyleBold, nil, 1
+	}
+
+	rely := y - 1
 	if x >= 0 && x < 40 {
-		if x < len(m.stats[y].Name) {
-			ch = rune(m.stats[y].Name[x])
+		if x < len(m.stats[rely].Name) {
+			ch = rune(m.stats[rely].Name[x])
 		} else {
 			ch = ' '
 		}
@@ -107,7 +128,7 @@ func (m *model) GetCell(x, y int) (rune, tcell.Style, []rune, int) {
 		ch = ' '
 	} else {
 		relx := x - 42
-		sum := m.summaries[m.stats[y].ID]
+		sum := m.summaries[m.stats[rely].ID]
 		if relx < len(sum) {
 			ch = rune(sum[relx])
 		} else {
@@ -127,11 +148,6 @@ func (m *model) SetCursor(int, int)                {}
 func (m *model) GetCursor() (int, int, bool, bool) { return 0, 0, false, false }
 func (m *model) MoveCursor(offx, offy int)         {}
 
-type statSummary struct {
-	stat    intr.Stat
-	summary string
-}
-
 type background struct {
 	app            *views.Application
 	title          *views.TextBar
@@ -141,6 +157,7 @@ type background struct {
 	refreshSummary chan intr.Stat
 	model          *model
 	datasets       map[string]intr.Dataset
+	timeframe      string
 	sync.Mutex
 }
 
@@ -154,6 +171,7 @@ func newBackground(app *views.Application, title *views.TextBar, m *views.CellVi
 		main:           m,
 		model:          newModel(),
 		datasets:       make(map[string]intr.Dataset),
+		timeframe:      "1d15m1w",
 	}
 	b.main.SetModel(b.model)
 
@@ -177,6 +195,7 @@ func (b *background) loop() {
 			refresh = true
 		case s := <-b.stats:
 			b.model.SetStats(s)
+			b.model.SetTimeframe(b.timeframe)
 			for _, x := range s[:100] {
 				b.refreshSummary <- x
 			}
@@ -211,7 +230,7 @@ func (b *background) list() {
 
 func (b *background) summary() {
 	for s := range b.refreshSummary {
-		dset, err := intr.LoadDataset(s.ID, "1d15m1w")
+		dset, err := intr.LoadDataset(s.ID, b.timeframe)
 		if err != nil {
 			log.Printf("load dataset err: %s", err)
 		}
@@ -220,8 +239,7 @@ func (b *background) summary() {
 		b.Unlock()
 		width := 8
 		sum := NewSummary(&dset)
-		// sumStr := fmt.Sprintf("%6.2f\t%6.2f\t%6.2f\t%.6g\t%.6g\t%.6g\t%.6g\t%.6g", sum.Latest, sum.Min, sum.Max, sum.Mean, sum.Total, sum.StdDev, sum.Conf95Min, sum.Conf99Max)
-		sumStr := strings.Join([]string{
+		sumStrs := []string{
 			floatCol(sum.Latest, width),
 			floatCol(sum.Min, width),
 			floatCol(sum.Max, width),
@@ -230,7 +248,12 @@ func (b *background) summary() {
 			floatCol(sum.StdDev, width),
 			floatCol(sum.Conf95Min, width),
 			floatCol(sum.Conf95Max, width),
-		}, " ")
+		}
+		if s.Counter {
+			sumStrs[4] = fmt.Sprintf("%8s", "---")
+		}
+
+		sumStr := strings.Join(sumStrs, " ")
 		b.model.SetSummary(s.ID, sumStr)
 	}
 }
