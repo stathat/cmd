@@ -37,11 +37,12 @@ var (
 )
 
 type mainWindow struct {
-	parent *views.Application
-	view   views.View
-	main   *views.CellView
-	keybar *views.SimpleStyledText
-	status *views.SimpleStyledTextBar
+	parent     *views.Application
+	view       views.View
+	main       *views.CellView
+	keybar     *views.SimpleStyledText
+	status     *views.SimpleStyledTextBar
+	background *background
 
 	views.Panel
 }
@@ -55,7 +56,17 @@ func (a *mainWindow) HandleEvent(ev tcell.Event) bool {
 			case 'Q', 'q':
 				a.parent.Quit()
 				return true
+			case 'R', 'r':
+				a.background.SortRecent()
+				return true
+			case 'D', 'd':
+				a.background.SortData()
+				return true
+			case ' ':
+				a.background.Refresh()
+				return true
 			}
+
 		}
 	}
 
@@ -148,6 +159,13 @@ func (m *model) SetCursor(int, int)                {}
 func (m *model) GetCursor() (int, int, bool, bool) { return 0, 0, false, false }
 func (m *model) MoveCursor(offx, offy int)         {}
 
+type sortmeth int
+
+const (
+	sortData sortmeth = iota
+	sortRecent
+)
+
 type background struct {
 	app            *views.Application
 	title          *views.TextBar
@@ -158,6 +176,8 @@ type background struct {
 	model          *model
 	datasets       map[string]intr.Dataset
 	timeframe      string
+	refresh        chan bool
+	sortMethod     sortmeth
 	sync.Mutex
 }
 
@@ -172,6 +192,7 @@ func newBackground(app *views.Application, title *views.TextBar, m *views.CellVi
 		model:          newModel(),
 		datasets:       make(map[string]intr.Dataset),
 		timeframe:      "1d15m1w",
+		refresh:        make(chan bool),
 	}
 	b.main.SetModel(b.model)
 
@@ -183,6 +204,24 @@ func newBackground(app *views.Application, title *views.TextBar, m *views.CellVi
 	}
 
 	return b
+}
+
+func (b *background) Refresh() {
+	b.refresh <- true
+}
+
+func (b *background) SortRecent() {
+	b.Lock()
+	b.sortMethod = sortRecent
+	b.Unlock()
+	b.Refresh()
+}
+
+func (b *background) SortData() {
+	b.Lock()
+	b.sortMethod = sortData
+	b.Unlock()
+	b.Refresh()
 }
 
 func (b *background) loop() {
@@ -221,10 +260,21 @@ func (b *background) list() {
 		if err != nil {
 			fmt.Printf("StatList err: %s", err)
 		}
-		sort.Sort(intr.ByDataReceivedAt(stats))
+		switch b.sortMethod {
+		case sortData:
+			sort.Sort(intr.ByDataReceivedAt(stats))
+		case sortRecent:
+			sort.Sort(intr.ByCreatedAt(stats))
+		default:
+			sort.Sort(intr.ByDataReceivedAt(stats))
+		}
 
 		b.stats <- stats
-		time.Sleep(time.Minute)
+		select {
+		case <-b.refresh:
+			continue
+		case <-time.After(time.Minute):
+		}
 	}
 }
 
@@ -249,7 +299,7 @@ func (b *background) summary() {
 			floatCol(sum.Conf95Min, width),
 			floatCol(sum.Conf95Max, width),
 		}
-		if s.Counter {
+		if !s.Counter {
 			sumStrs[4] = fmt.Sprintf("%8s", "---")
 		}
 
@@ -303,7 +353,7 @@ func top(cmd *cobra.Command, args []string) error {
 	app.SetRootWidget(window)
 
 	b := newBackground(app, title, window.main)
-	_ = b
+	window.background = b
 
 	if e := app.Run(); e != nil {
 		fmt.Fprintln(os.Stderr, e.Error())

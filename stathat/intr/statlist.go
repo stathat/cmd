@@ -8,6 +8,7 @@ type Stat struct {
 	Public         bool   `json:"public"`
 	Counter        bool   `json:"counter"`
 	DataReceivedAt int    `json:"data_received_at"`
+	CreatedAt      int    `json:"created_at"`
 }
 
 func (s Stat) Kind() string {
@@ -41,3 +42,9 @@ type ByDataReceivedAt []Stat
 func (a ByDataReceivedAt) Len() int           { return len(a) }
 func (a ByDataReceivedAt) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByDataReceivedAt) Less(i, j int) bool { return a[i].DataReceivedAt > a[j].DataReceivedAt }
+
+type ByCreatedAt []Stat
+
+func (a ByCreatedAt) Len() int           { return len(a) }
+func (a ByCreatedAt) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByCreatedAt) Less(i, j int) bool { return a[i].CreatedAt > a[j].CreatedAt }
