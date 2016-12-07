@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"fmt"
+	"os"
 	"strings"
 
+	isatty "github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
 	"github.com/stathat/cmd/stathat/intr"
 )
@@ -15,6 +18,8 @@ var searchCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(searchCmd)
+	searchCmd.Flags().BoolVar(&listJSON, "json", false, "display output as JSON")
+	searchCmd.Flags().BoolVar(&listCSV, "csv", false, "display output as CSV")
 }
 
 func runSearch(cmd *cobra.Command, args []string) error {
@@ -37,5 +42,15 @@ func runSearch(cmd *cobra.Command, args []string) error {
 		match = append(match, s)
 	}
 
-	return outputStats(match)
+	if isatty.IsTerminal(os.Stdout.Fd()) || listJSON || listCSV {
+		return outputStats(match)
+	}
+
+	ids := make([]string, len(match))
+	for i, s := range match {
+		ids[i] = s.ID
+	}
+	fmt.Println(strings.Join(ids, " "))
+
+	return nil
 }

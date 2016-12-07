@@ -22,7 +22,7 @@ var listCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(listCmd)
 	listCmd.Flags().BoolVar(&listJSON, "json", false, "display output as JSON")
-	listCmd.Flags().BoolVar(&listCSV, "csv", false, "display output as JSON")
+	listCmd.Flags().BoolVar(&listCSV, "csv", false, "display output as CSV")
 }
 
 func runList(cmd *cobra.Command, args []string) error {
