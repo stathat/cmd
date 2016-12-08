@@ -9,6 +9,24 @@
 			"revisionTime": "2016-10-11T02:33:12Z"
 		},
 		{
+			"checksumSHA1": "WuPOA1T+6qG/al2wgOzeJnAMkhE=",
+			"path": "github.com/gdamore/encoding",
+			"revision": "b23993cbb6353f0e6aa98d0ee318a34728f628b9",
+			"revisionTime": "2015-12-15T21:28:35Z"
+		},
+		{
+			"checksumSHA1": "zRc9J80DSl2IEVbQAx9GTx4FJ30=",
+			"path": "github.com/gdamore/tcell",
+			"revision": "a7344e526a87616708d2f3ba79ba03e63fc2b20f",
+			"revisionTime": "2016-09-28T11:51:06Z"
+		},
+		{
+			"checksumSHA1": "p6NyUv4NfXmMOnUQLJEzGT9HfDo=",
+			"path": "github.com/gdamore/tcell/views",
+			"revision": "a7344e526a87616708d2f3ba79ba03e63fc2b20f",
+			"revisionTime": "2016-09-28T11:51:06Z"
+		},
+		{
 			"checksumSHA1": "8OPDk+bKyRGJoKcS4QNw9F7dpE8=",
 			"path": "github.com/hashicorp/hcl",
 			"revision": "6f5bfed9a0a22222fbe4e731ae3481730ba41e93",
@@ -69,10 +87,28 @@
 			"revisionTime": "2013-11-06T22:25:44Z"
 		},
 		{
+			"checksumSHA1": "DVRO5DGZrBvO92+G/IA7xABQWkc=",
+			"path": "github.com/lucasb-eyer/go-colorful",
+			"revision": "9c2852a141bf4711e4276f8f119c90d0f20a556c",
+			"revisionTime": "2016-08-11T21:59:58Z"
+		},
+		{
 			"checksumSHA1": "S6PDDQMYaKwLDIP/NsRYb4FRAqQ=",
 			"path": "github.com/magiconair/properties",
 			"revision": "0723e352fa358f9322c938cc2dadda874e9151a9",
 			"revisionTime": "2016-09-08T09:36:58Z"
+		},
+		{
+			"checksumSHA1": "xZuhljnmBysJPta/lMyYmJdujCg=",
+			"path": "github.com/mattn/go-isatty",
+			"revision": "66b8e73f3f5cda9f96b69efd03dd3d7fc4a5cdb8",
+			"revisionTime": "2016-08-06T12:27:52Z"
+		},
+		{
+			"checksumSHA1": "yf185lmVPcvXjLZuPT1s4JzxI18=",
+			"path": "github.com/mattn/go-runewidth",
+			"revision": "737072b4e32b7a5018b4a7125da8d12de90e8045",
+			"revisionTime": "2016-10-12T01:35:12Z"
 		},
 		{
 			"checksumSHA1": "AXacfEchaUqT5RGmPmMXsOWRhv8=",
@@ -159,6 +195,12 @@
 			"revisionTime": "2016-10-10T11:40:38Z"
 		},
 		{
+			"checksumSHA1": "M1a2PS3bsBJeybMrCqsFf/dwh1g=",
+			"path": "github.com/stathat/numbers",
+			"revision": "0660d1b9b149452bea91204fc57ca7ec77792634",
+			"revisionTime": "2016-11-21T05:42:50Z"
+		},
+		{
 			"checksumSHA1": "9SXz4jl1zZAIXjTmgmFhiIx+EQg=",
 			"path": "golang.org/x/crypto/ssh",
 			"revision": "83f1503f771a82af8a31f358eb825e9efb5dae6c",
@@ -169,6 +211,18 @@
 			"path": "golang.org/x/sys/unix",
 			"revision": "0879c8a4d6aac6173053a1349f0aa915081c44da",
 			"revisionTime": "2015-08-24T04:31:33Z"
+		},
+		{
+			"checksumSHA1": "Mr4ur60bgQJnQFfJY0dGtwWwMPE=",
+			"path": "golang.org/x/text/encoding",
+			"revision": "ede1cb9f9f2f84c3bace9ca113fd740fc916cdd0",
+			"revisionTime": "2016-09-29T15:02:56Z"
+		},
+		{
+			"checksumSHA1": "TF4hoIqHVEAvOq67rfnSLSkcZ1Y=",
+			"path": "golang.org/x/text/encoding/internal/identifier",
+			"revision": "ede1cb9f9f2f84c3bace9ca113fd740fc916cdd0",
+			"revisionTime": "2016-09-29T15:02:56Z"
 		},
 		{
 			"checksumSHA1": "ziMb9+ANGRJSSIuxYdRbA+cDRBQ=",
