@@ -15,7 +15,7 @@ func check(t *testing.T, c *cobra.Command) {
 		t.Errorf("%s Short starts with uppercase: %q", c.Name(), c.Short)
 	}
 	if c.Short[len(c.Short)-1] == '.' {
-		t.Errorf("%s Short ends with period: ", c.Name(), c.Short)
+		t.Errorf("%s Short ends with period: %s", c.Name(), c.Short)
 	}
 	for _, sub := range c.Commands() {
 		check(t, sub)
