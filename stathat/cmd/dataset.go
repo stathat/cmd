@@ -67,10 +67,15 @@ func runDataset(cmd *cobra.Command, args []string) error {
 	return Output(&DataTable{dsets: datasets}, enc)
 }
 
+// DataTable represents a set of intr.Dataset objects.  It
+// contains methods for outputting and formatting the dataset
+// data.
 type DataTable struct {
 	dsets []intr.Dataset
 }
 
+// Columns returns the string representation of the columns
+// for a row.
 func (s *DataTable) Columns(row int) []string {
 	t := time.Unix(s.dsets[0].Points[row].Time, 0)
 	r := []string{t.Format(time.Stamp)}
@@ -80,6 +85,8 @@ func (s *DataTable) Columns(row int) []string {
 	return r
 }
 
+// Header returns the columns readers for the group
+// of datasets in DataTable.
 func (s *DataTable) Header() []string {
 	h := []string{"Time"}
 	for _, d := range s.dsets {
@@ -88,6 +95,7 @@ func (s *DataTable) Header() []string {
 	return h
 }
 
+// Len returns the number of points in the first dataset.
 func (s *DataTable) Len() int {
 	if len(s.dsets) == 0 {
 		return 0
@@ -95,6 +103,7 @@ func (s *DataTable) Len() int {
 	return len(s.dsets[0].Points)
 }
 
+// Raw returns the unformatted source data.
 func (s *DataTable) Raw() interface{} {
 	return s.dsets
 }

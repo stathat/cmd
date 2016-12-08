@@ -43,26 +43,35 @@ func runList(cmd *cobra.Command, args []string) error {
 	return outputStats(stats)
 }
 
+// StatTable represents a group of stats.  It contains
+// methods to help output the data in a tabular format.
 type StatTable struct {
 	stats []intr.Stat
 }
 
+// NewStatTable creates a StatTable from a list of stats.
 func NewStatTable(stats []intr.Stat) *StatTable {
 	return &StatTable{stats: stats}
 }
 
+// Columns returns the string representation of the
+// columns in a row.
 func (s *StatTable) Columns(row int) []string {
 	return s.stats[row].Strings()
 }
 
+// Header returns the column headers for the table.
 func (s *StatTable) Header() []string {
 	return []string{"ID", "Name", "Type", "Access"}
 }
 
+// Len returns the number of stats in this StatTable.
 func (s *StatTable) Len() int {
 	return len(s.stats)
 }
 
+// Raw returns a raw representation of the StatTable
+// data.
 func (s *StatTable) Raw() interface{} {
 	return s.stats
 }
