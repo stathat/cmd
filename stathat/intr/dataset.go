@@ -45,3 +45,13 @@ func LoadDataset(id, timeframe string) (Dataset, error) {
 	}
 	return dset, nil
 }
+
+func LoadDatasetFull(id string) (Dataset, error) {
+	var dset Dataset
+	p := path.Join("stats", id, "dataset_full")
+	v := url.Values{}
+	if err := net.DefaultAPI.Get(p, v, &dset); err != nil {
+		return Dataset{}, err
+	}
+	return dset, nil
+}

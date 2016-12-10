@@ -22,12 +22,14 @@ var datasetCmd = &cobra.Command{
 }
 
 var timeframe string
+var dsfull bool
 
 func init() {
 	RootCmd.AddCommand(datasetCmd)
 	datasetCmd.Flags().BoolVar(&listJSON, "json", false, "display output as JSON")
 	datasetCmd.Flags().BoolVar(&listCSV, "csv", false, "display output as CSV")
 	datasetCmd.Flags().StringVar(&timeframe, "tf", "1w3h", "timeframe")
+	datasetCmd.Flags().BoolVar(&dsfull, "full", false, "get full dataset")
 }
 
 func runDataset(cmd *cobra.Command, args []string) error {
@@ -47,7 +49,13 @@ func runDataset(cmd *cobra.Command, args []string) error {
 		if !ok {
 			return fmt.Errorf("no stat found for %q", id)
 		}
-		dset, err := intr.LoadDataset(stat.ID, timeframe)
+		var dset intr.Dataset
+		var err error
+		if dsfull {
+			dset, err = intr.LoadDatasetFull(stat.ID)
+		} else {
+			dset, err = intr.LoadDataset(stat.ID, timeframe)
+		}
 		if err != nil {
 			return err
 		}
