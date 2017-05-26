@@ -87,11 +87,11 @@ func (e ezarg) post() error {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK || resp.StatusCode != http.StatusNoContent {
 		return fmt.Errorf("post to %s failed: %s", apiHost, resp.Status)
 	}
 
-	fmt.Printf("worked %+v", resp)
+	fmt.Printf("worked %+v\n", resp)
 
 	return nil
 }
