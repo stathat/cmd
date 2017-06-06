@@ -88,7 +88,9 @@ __) |_(_| |_  |  | |(_| |_
 
 var logos = []string{logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9}
 
-const version = "0.2.10"
+var version = "0.2.10"
+var commit string
+var date string
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
@@ -103,7 +105,14 @@ var versionCmd = &cobra.Command{
 		rand.Seed(time.Now().Unix())
 		index := rand.Intn(len(logos))
 		fmt.Println(logos[index])
-		fmt.Printf("stathat cmd version %s\n\n", version)
+		fmt.Printf("stathat cmd version %s\n", version)
+		if commit != "" {
+			fmt.Printf("\tgit commit: %s\n", commit)
+		}
+		if date != "" {
+			fmt.Printf("\tbuild date: %s\n", date)
+		}
+		fmt.Println()
 	},
 }
 

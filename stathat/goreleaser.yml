@@ -6,6 +6,7 @@ build:
                 - windows
         goarch:
                 - amd64
+        ldflags: -s -w -X github.com/stathat/cmd/stathat/cmd.version={{.Version}} -X github.com/stathat/cmd/stathat/cmd.commit={{.Commit}} -X github.com/stathat/cmd/stathat/cmd.date={{.Date}}
 
 
 archive:
