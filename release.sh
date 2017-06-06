@@ -25,20 +25,13 @@ else
 fi
 
 echo "-------------------------------------------------------------------------"
-echo "Downloading release for version $version"
+echo "Using goreleaser to make release for $version"
 echo "-------------------------------------------------------------------------"
 
-filename="v$version.tar.gz"
-wget "https://github.com/stathat/cmd/archive/$filename"
+cd stathat
+goreleaser
+
 
 echo "-------------------------------------------------------------------------"
-echo "Calculating sha256"
+echo "Release for $version done"
 echo "-------------------------------------------------------------------------"
-
-shasum -a 256 $filename
-
-rm $filename
-
-#that's it for now...
-
-echo "done."
