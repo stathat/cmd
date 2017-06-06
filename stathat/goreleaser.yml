@@ -17,3 +17,11 @@ archive:
                 - LICENSE
 
 
+brew:
+        github:
+                owner: stathat
+                repo: homebrew-cmd
+
+        folder: Formula
+        homepage: "https://www.stathat.com"
+        description: "Command-line interface to StatHat"

@@ -88,7 +88,7 @@ __) |_(_| |_  |  | |(_| |_
 
 var logos = []string{logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9}
 
-const version = "0.2.3"
+const version = "0.2.7"
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
