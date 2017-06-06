@@ -24,6 +24,21 @@ else
 	echo "git tag $version_tag failed on $srcdir, presumably it exists"
 fi
 
-# that's it for now...
+echo "-------------------------------------------------------------------------"
+echo "Downloading release for version $version"
+echo "-------------------------------------------------------------------------"
+
+filename="v$version.tar.gz"
+wget "https://github.com/stathat/cmd/archive/$filename"
+
+echo "-------------------------------------------------------------------------"
+echo "Calculating sha256"
+echo "-------------------------------------------------------------------------"
+
+shasum -a 256 $filename
+
+rm $filename
+
+#that's it for now...
 
 echo "done."
