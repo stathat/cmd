@@ -6,7 +6,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -90,6 +89,4 @@ func initConfig() {
 	for _, name := range names {
 		config.SetDebug(name, true)
 	}
-
-	log.Printf("host: %s, config.Host: %s", host, config.Host())
 }

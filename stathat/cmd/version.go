@@ -88,7 +88,7 @@ __) |_(_| |_  |  | |(_| |_
 
 var logos = []string{logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9}
 
-var version = "0.2.10"
+var version = "0.2.12"
 var commit string
 var date string
 
